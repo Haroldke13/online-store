@@ -5,7 +5,7 @@
 
 Welcome to the **Ecommerce** project! This is a Flask-based eCommerce website that allows users to browse, add items to their cart, and manage their profile and orders. It features a user-friendly interface, robust account management, and a powerful admin panel for managing shop items and orders.
 
-You can see the live version of the website [here](https://ecommerce-ts8m.onrender.com).
+You can see the live version of the website [here](https://online-store-soch.onrender.com).
 
 ## Features
 
