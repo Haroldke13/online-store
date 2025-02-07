@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Shop Items {% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="text-center">Add Shop Items</h2>
+
+    <form action="" method="POST" enctype="multipart/form-data" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            <label>{{ form.product_name.label }}</label>
+            {{ form.product_name(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label>{{ form.previous_price.label }}</label>
+            {{ form.previous_price(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label>{{ form.current_price.label }}</label>
+            {{ form.current_price(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label>{{ form.in_stock.label }}</label>
+            {{ form.in_stock(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label>{{ form.product_picture.label }}</label>
+            {{ form.product_picture(class="form-control") }}
+        </div>
+
+        <div class="form-check mb-3">
+            {{ form.flash_sale(class="form-check-input") }}
+            <label class="form-check-label">{{ form.flash_sale.label }}</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{ form.add_product.label.text }}</button>
+    </form>
+</div>
+{% endblock %}

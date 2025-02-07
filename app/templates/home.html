@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+
+{% block body %}
+
+<div class="container text-center">
+    <div class="row" style="margin: 10px;">
+      <div class="col " style="margin: 3px;">
+        <div class="list-group" id="right1">
+            <a href="{{ url_for('views.search_random', category='supermarket') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                <span class="link-name">Supermarket</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='health_beauty') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span class="link-name">Health & Beauty</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='home_office') }}" class="list-group-item list-group-item-action">
+                <i class="fa-solid fa-comment"></i>                
+                <span class="link-name">Home & Office</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='fashion') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-camera" aria-hidden="true"></i>
+                <span class="link-name">Fashion</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='electronics') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-audio-description" aria-hidden="true"></i>
+                <span class="link-name">Electronics</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='gaming') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-cubes" aria-hidden="true"></i>
+                <span class="link-name">Gaming</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='baby_products') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-child" aria-hidden="true"></i>
+                <span class="link-name">Baby Products</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='sporting_goods') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-bicycle" aria-hidden="true"></i>
+                <span class="link-name">Sporting Goods</span>
+            </a>
+            <a href="{{ url_for('views.search_random', category='garden_outdoor') }}" class="list-group-item list-group-item-action">
+                <i class="fa fa-binoculars" aria-hidden="true"></i>
+                <span class="link-name">Garden & Outdoor</span>
+            </a>
+        </div>
+        
+      </div>
+
+
+      <div class="col-md-7" style="margin: 3px;">
+        <img src="../static/images/giphy.gif" alt="" style="width: 600px; height: 365px; border-radius: 10px;">
+      </div>
+      <div class="col-md-2">
+        <div class="row bg-white rounded p-2">
+
+            <div class="row d-flex align-items-center mt-2">
+                <div class="col-auto">
+                    <i class="bi bi-question-circle-fill" style="font-size: 30px; color: #007bff;"></i>
+                </div>
+                <div class="col">
+                    <h6 class="fw-bold text-uppercase" style="font-size: 12px;">HELP </h6>
+                    <p class="text-muted mb-0" style="font-size: small;">Customer care</p>
+                </div>
+            </div>
+        
+            <div class="row d-flex align-items-center mt-2">
+                <div class="col-auto">
+                    <i class="bi bi-arrow-repeat" style="font-size: 30px; color: #28a745;"></i>
+                </div>
+                <div class="col">
+                    <h6 class="fw-bold text-uppercase" style="font-size: 12px;">REFUNDS</h6>
+                    <p class="text-muted mb-0" style="font-size: small;">Quick Refund</p>
+                </div>
+            </div>
+        
+            <div class="row d-flex align-items-center mt-2">
+                <div class="col-auto">
+                    <i class="bi bi-cash-stack" style="font-size: 30px; color: #ffc107;"></i>
+                </div>
+                <div class="col">
+                    <h6 class="fw-bold text-uppercase" style="font-size: 12px;">SELL ON THE MARKET</h6>
+                    <p class="text-muted mb-0" style="font-size: small;">Register as Seller</p>
+                </div>
+            </div>
+        
+        </div>
+        
+        <div class="row" style="margin-top: 12px;">
+            <div class="col">
+                <img src="../static/images/right2.gif" alt="" class="right2">
+            </div>
+        
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="container text-center">
+    <div class="row g-3">
+        <div class="col-6 col-md-3">
+            <div class="d-flex flex-column align-items-center bg-white shadow-sm rounded p-3">
+                <i class="bi bi-laptop-fill text-primary" style="font-size: 30px;"></i>
+                <h6 class="mt-2 fw-bold" style="font-size: 14px;">Buy Tech</h6>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="d-flex flex-column align-items-center bg-white shadow-sm rounded p-3">
+                <i class="bi bi-truck text-success" style="font-size: 30px;"></i>
+                <h6 class="mt-2 fw-bold" style="font-size: 14px;">Free Delivery</h6>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="d-flex flex-column align-items-center bg-white shadow-sm rounded p-3">
+                <i class="bi bi-cart-check-fill text-warning" style="font-size: 30px;"></i>
+                <h6 class="mt-2 fw-bold" style="font-size: 14px;">Get Food</h6>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="d-flex flex-column align-items-center bg-white shadow-sm rounded p-3">
+                <i class="bi bi-phone text-danger" style="font-size: 30px;"></i>
+                <h6 class="mt-2 fw-bold" style="font-size: 14px;">Airtime & Bills</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div class="container mt-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
+        
+        {% for item in items %}
+        <div class="col">
+            <div class="card shadow-sm border-0 h-100">
+                <!-- Product Image -->
+                <img src="{{ url_for('views.media', filename=item.product_picture) }}" class="card-img-top" 
+                                     alt="{{ item.product_name }}" style="height: 200px; object-fit: cover; border-radius: 10px;">
+
+                <div class="card-body text-center">
+                    <!-- Product Name -->
+                    <h6 class="text-muted">{{ item.product_name }}</h6>
+
+                    <!-- Pricing -->
+                    <div class="mt-2">
+                        <h5 class="fw-bold">Ksh {{ item.current_price }}</h5>
+                        <strike><p class="text-secondary">Ksh {{ item.previous_price }}</p></strike>
+                    </div>
+
+                    <!-- Stock Info -->
+                    <p class="text-success">{{ item.in_stock }} Items Left</p>
+
+                    <!-- Add to Cart Button -->
+                    <a href="{{ url_for('views.add_to_cart', item_id=item.id) }}" class="btn btn-primary w-100">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Payment{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">Confirm Payment</h2>
+    <p class="text-center mb-4">Your total amount is: <strong>${{ amount }}</strong></p>
+    <form id="payment-form" method="POST" action="{{ url_for('views.handle_payments') }}">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.amount.label(class="form-label") }}
+            {{ form.amount(class="form-control", value=amount, readonly=True) }}
+        </div>
+
+        <div class="form-group">
+            {{ form.payment_method.label(class="form-label") }}
+            {{ form.payment_method(class="form-control") }}
+        </div>
+
+        <!-- PayPal Email Field -->
+        <div class="form-group mb-4" id="paypal-payment" style="display:none;">
+            <label for="paypal-email" class="form-label">PayPal Email</label>
+            <input type="email" id="paypal-email" name="paypal_email" class="form-control" placeholder="Enter your PayPal email">
+        </div>
+
+        <!-- M-Pesa Phone Number Field -->
+        <div class="form-group mb-4" id="mpesa-payment" style="display:none;">
+            <label for="mpesa-phone" class="form-label">M-Pesa Phone Number</label>
+            <input type="text" id="mpesa-phone" name="mpesa_phone" class="form-control" placeholder="Enter your M-Pesa phone number">
+        </div>
+
+        <!-- Card Payment Fields -->
+        <div class="form-group mb-4" id="card-payment" style="display:none;">
+            <label for="card-element" class="form-label">Credit or Debit Card</label>
+            <div id="card-element" class="form-control">
+                <!-- A Stripe Element will be inserted here. -->
+            </div>
+            <div id="card-errors" role="alert" class="mt-2 text-danger"></div>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" id="submit-button" class="btn btn-success btn-lg w-100">Pay Now</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var stripe = Stripe('{{ stripe_publishable_key }}');
+        var elements = stripe.elements();
+        var cardElement = elements.create('card', { hidePostalCode: true });
+        var form = document.getElementById('payment-form');
+        var paymentMethodSelect = document.querySelector('select[name="payment_method"]');
+        var cardPayment = document.getElementById('card-payment');
+        var paypalPayment = document.getElementById('paypal-payment');
+        var mpesaPayment = document.getElementById('mpesa-payment');
+        var csrfToken = '{{ csrf_token() }}';
+
+        paymentMethodSelect.addEventListener('change', function() {
+            var paymentMethod = paymentMethodSelect.value;
+            cardPayment.style.display = paymentMethod === 'card' ? 'block' : 'none';
+            paypalPayment.style.display = paymentMethod === 'paypal' ? 'block' : 'none';
+            mpesaPayment.style.display = paymentMethod === 'mpesa' ? 'block' : 'none';
+            if (paymentMethod === 'card') {
+                cardElement.mount('#card-element');
+            } else {
+                cardElement.unmount();
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var paymentMethod = paymentMethodSelect.value;
+            var data = new FormData(form);
+            var payload = {};
+
+            data.forEach(function(value, key){
+                payload[key] = value;
+            });
+
+            if (paymentMethod === 'card') {
+                stripe.createToken(cardElement).then(function(result) {
+                    if (result.error) {
+                        document.getElementById('card-errors').textContent = result.error.message;
+                    } else {
+                        payload['stripeToken'] = result.token.id;
+                        submitPayment(payload);
+                    }
+                });
+            } else {
+                submitPayment(payload);
+            }
+        });
+
+        function submitPayment(payload) {
+            fetch('{{ url_for("views.handle_payments") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(payload)
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    if (payload['payment_method'] === 'card') {
+                        document.getElementById('card-errors').textContent = data.error;
+                    } else {
+                        alert(data.error);
+                    }
+                }
+            }).catch(error => {
+                alert('An error occurred: ' + error.message);
+            });
+        }
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $("#mpesa-form").submit(function (e) {
+        e.preventDefault();  // Prevent default form submission
+
+        var phone_number = $("input[name='phone_number']").val();
+        var amount = $("input[name='amount']").val();
+
+        // Prepare JSON data
+        var data = {
+            "phone_number": phone_number,
+            "amount": amount
+        };
+
+        // Make the AJAX request
+        $.ajax({
+            url: "/mpesa/stk_push",  // M-Pesa STK Push endpoint
+            type: "POST",
+            contentType: "application/json",  // Ensure JSON content-type
+            data: JSON.stringify(data),  // Convert data to JSON
+            success: function(response) {
+                alert(response.message);
+            },
+            error: function(xhr, status, error) {
+                alert("Error: " + xhr.responseJSON.error);
+            }
+        });
+    });
+</script>
+
+{% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block body %}
+
+<!-- Custom CSS for Better Styling -->
+<style>
+    body {
+        background: #f8f9fa; /* Light Gray Background */
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .login-card h3 {
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        text-align: left;
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: #555;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        height: 45px;
+        border: 1px solid #ced4da;
+    }
+
+    .btn-custom {
+        background: #007bff;
+        color: white;
+        border-radius: 8px;
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+        background: #0056b3;
+    }
+
+    .signup-link {
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    .signup-link a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<!-- Login Section -->
+<div class="login-container">
+    <div class="login-card">
+        <h3>Login to Start Shopping</h3>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                {{ form.email(class="form-control", placeholder="Enter your email") }}
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                {{ form.password(class="form-control", placeholder="Enter your password") }}
+            </div>
+
+            <button type="submit" class="btn btn-custom">Login</button>
+
+            <div class="signup-link">
+                Don't have an account? <a href="/signup">Sign Up</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
