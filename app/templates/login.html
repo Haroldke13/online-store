@@ -4,10 +4,13 @@
 
 {% block body %}
 
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 <!-- Custom CSS for Better Styling -->
 <style>
     body {
-        background: #f8f9fa; /* Light Gray Background */
+        background: #f8f9fa;
         font-family: 'Poppins', sans-serif;
     }
 
@@ -26,6 +29,12 @@
         width: 100%;
         max-width: 400px;
         text-align: center;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .login-card h3 {
@@ -37,6 +46,7 @@
     .form-group {
         text-align: left;
         margin-bottom: 1rem;
+        position: relative;
     }
 
     .form-group label {
@@ -48,6 +58,22 @@
         border-radius: 8px;
         height: 45px;
         border: 1px solid #ced4da;
+        padding-left: 40px;
+        transition: border 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+        font-size: 16px;
     }
 
     .btn-custom {
@@ -78,26 +104,45 @@
     .signup-link a:hover {
         text-decoration: underline;
     }
+
+    /* Password Toggle Button */
+    .password-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #888;
+    }
+
+    .password-toggle:hover {
+        color: #007bff;
+    }
 </style>
 
 <!-- Login Section -->
 <div class="login-container">
     <div class="login-card">
-        <h3>Login to Start Shopping</h3>
+        <h3><i class="fas fa-shopping-cart"></i> Login to Start Shopping</h3>
         <form method="POST">
             {{ form.hidden_tag() }}
 
+            <!-- Email Field -->
             <div class="form-group">
                 <label for="email">Email Address</label>
-                {{ form.email(class="form-control", placeholder="Enter your email") }}
+                <i class="fas fa-envelope input-icon"></i>
+                {{ form.email(class="form-control", placeholder="Enter your email", id="email") }}
             </div>
 
+            <!-- Password Field -->
             <div class="form-group">
                 <label for="password">Password</label>
-                {{ form.password(class="form-control", placeholder="Enter your password") }}
+                <i class="fas fa-lock input-icon"></i>
+                {{ form.password(class="form-control", placeholder="Enter your password", id="password") }}
+                <i class="fas fa-eye password-toggle" id="togglePassword"></i>
             </div>
 
-            <button type="submit" class="btn btn-custom">Login</button>
+            <button type="submit" class="btn btn-custom"><i class="fas fa-sign-in-alt"></i> Login</button>
 
             <div class="signup-link">
                 Don't have an account? <a href="/signup">Sign Up</a>
@@ -105,5 +150,34 @@
         </form>
     </div>
 </div>
+
+<!-- JavaScript Enhancements -->
+<script>
+    // Password Toggle Functionality
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        let passwordField = document.getElementById("password");
+        let icon = this;
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            icon.classList.replace("fa-eye-slash", "fa-eye");
+        }
+    });
+
+    // Smooth Input Focus Animation
+    document.querySelectorAll(".form-control").forEach((input) => {
+        input.addEventListener("focus", function () {
+            this.style.borderColor = "#007bff";
+            this.style.boxShadow = "0 0 8px rgba(0, 123, 255, 0.2)";
+        });
+
+        input.addEventListener("blur", function () {
+            this.style.borderColor = "#ced4da";
+            this.style.boxShadow = "none";
+        });
+    });
+</script>
 
 {% endblock %}

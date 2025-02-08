@@ -4,42 +4,108 @@
 
 {% block body %}
 <div class="container mt-4">
-    <h2 class="text-center">Add Shop Items</h2>
+    <h2 class="text-center text-primary">Add Shop Items</h2>
 
-    <form action="" method="POST" enctype="multipart/form-data" class="mt-4">
-        {{ form.hidden_tag() }}
+    <div class="card shadow p-4">
+        <form action="" method="POST" enctype="multipart/form-data" id="add-item-form">
+            {{ form.hidden_tag() }}
 
-        <div class="mb-3">
-            <label>{{ form.product_name.label }}</label>
-            {{ form.product_name(class="form-control") }}
-        </div>
+            <div class="mb-3">
+                <label class="form-label">{{ form.product_name.label }}</label>
+                {{ form.product_name(class="form-control", id="product_name", placeholder="Enter product name") }}
+                <div class="invalid-feedback">Product name is required.</div>
+            </div>
 
-        <div class="mb-3">
-            <label>{{ form.previous_price.label }}</label>
-            {{ form.previous_price(class="form-control") }}
-        </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.previous_price.label }}</label>
+                    {{ form.previous_price(class="form-control", id="previous_price", type="number", placeholder="Previous Price") }}
+                </div>
 
-        <div class="mb-3">
-            <label>{{ form.current_price.label }}</label>
-            {{ form.current_price(class="form-control") }}
-        </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.current_price.label }}</label>
+                    {{ form.current_price(class="form-control", id="current_price", type="number", placeholder="Current Price") }}
+                    <div class="invalid-feedback">Current price is required.</div>
+                </div>
+            </div>
 
-        <div class="mb-3">
-            <label>{{ form.in_stock.label }}</label>
-            {{ form.in_stock(class="form-control") }}
-        </div>
+            <div class="mb-3">
+                <label class="form-label">{{ form.in_stock.label }}</label>
+                {{ form.in_stock(class="form-control", id="in_stock", type="number", placeholder="Stock Quantity") }}
+                <div class="invalid-feedback">Stock quantity is required.</div>
+            </div>
 
-        <div class="mb-3">
-            <label>{{ form.product_picture.label }}</label>
-            {{ form.product_picture(class="form-control") }}
-        </div>
+            <div class="mb-3">
+                <label class="form-label">{{ form.product_picture.label }}</label>
+                {{ form.product_picture(class="form-control", id="product_picture") }}
+                <div class="invalid-feedback">Please upload a product image.</div>
+            </div>
 
-        <div class="form-check mb-3">
-            {{ form.flash_sale(class="form-check-input") }}
-            <label class="form-check-label">{{ form.flash_sale.label }}</label>
-        </div>
+            <div class="form-check mb-3">
+                {{ form.flash_sale(class="form-check-input", id="flash_sale") }}
+                <label class="form-check-label">{{ form.flash_sale.label }}</label>
+            </div>
 
-        <button type="submit" class="btn btn-primary">{{ form.add_product.label.text }}</button>
-    </form>
+            <button type="submit" class="btn btn-primary w-100">Add Product</button>
+        </form>
+    </div>
 </div>
+
+<!-- JavaScript for Validation -->
+<script>
+    document.getElementById("add-item-form").addEventListener("submit", function (event) {
+        let valid = true;
+
+        function checkField(id) {
+            const field = document.getElementById(id);
+            if (!field.value.trim()) {
+                field.classList.add("is-invalid");
+                valid = false;
+            } else {
+                field.classList.remove("is-invalid");
+            }
+        }
+
+        checkField("product_name");
+        checkField("current_price");
+        checkField("in_stock");
+        checkField("product_picture");
+
+        if (!valid) {
+            event.preventDefault();
+        }
+    });
+</script>
+
+<!-- Responsive Styling -->
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        background: white;
+        border-radius: 10px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: 0.3s ease-in-out;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+        .card {
+            padding: 20px;
+        }
+    }
+</style>
+
 {% endblock %}

@@ -4,47 +4,136 @@
 
 {% block body %}
 
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<!-- Custom CSS -->
+<style>
+    body {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .container {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h3, h4 {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .btn-custom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease-in-out;
+        border-radius: 10px;
+    }
+
+    .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+    }
+
+    .sidebar {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .list-group-item {
+        transition: all 0.3s ease-in-out;
+        border-radius: 10px;
+    }
+
+    .list-group-item:hover {
+        background: rgba(0, 123, 255, 0.1);
+        transform: scale(1.02);
+    }
+
+    .profile-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        object-fit: cover;
+    }
+</style>
+
 <div class="container my-5">
     <div class="row">
-        <h3 style="color: white;">Welcome <span class="text-capitalize">{{ customer.username }}</span></h3>
+        <h3>👋 Welcome, <span class="text-capitalize">{{ customer.username }}</span>!</h3>
 
-        <div class="col-sm-2 border-end" style="margin-top: 20px;">
+        <!-- Sidebar Menu -->
+        <div class="col-sm-3 sidebar">
             <ul class="list-unstyled">
-                <li class="d-grid"><a href="#" class="btn btn-primary">Profile</a></li>
-                <li class="d-grid"><a href="/change-password/{{ customer.id }}" class="btn btn-primary" style="margin-top: 5px;">Change Password</a></li>
-                <li class="d-grid"><a href="/orders/{{ customer.id }}" class="btn btn-primary" style="margin-top: 5px;">My Orders</a></li>
-                <li class="d-grid"><a href="/cart/{{ customer.id }}" class="btn btn-primary" style="margin-top: 5px;">My Cart</a></li>
+                <li class="d-grid"><a href="/profile/{{ current_user.id }}" class="btn btn-primary btn-custom"><i class="bi bi-person-circle"></i> Profile</a></li>
+                <li class="d-grid"><a href="/change-password/{{ customer.id }}" class="btn btn-primary btn-custom mt-2"><i class="bi bi-key"></i> Change Password</a></li>
+                <li class="d-grid"><a href="/orders" class="btn btn-primary btn-custom mt-2"><i class="bi bi-receipt"></i> My Orders</a></li>
+                <li class="d-grid"><a href="/cart" class="btn btn-primary btn-custom mt-2"><i class="bi bi-cart"></i> My Cart</a></li>
             </ul>
         </div>
 
-        <div class="col-sm-5 offset-sm-1" style="background-color: white; border-radius: 18px; margin-top: 20px; padding: 20px;">
+        <!-- Profile Section -->
+        <div class="col-sm-7 offset-sm-1 profile-card">
             <div class="row">
-                <div class="col-sm-8">
-                    <div class="card m-2 p-3">
-                        <h3>{{ customer.username }}</h3>
-                        <p><strong>Email:</strong> {{ customer.email }}</p>
-                        <p><strong>Joined On:</strong> {{ customer.date_joined.strftime('%B %d, %Y') }}</p>
+                <div class="col-sm-3 text-center">
+                    <div class="col-sm-3 text-center">
+
+                        <img src="{{ profile_picture }}" alt="Profile Picture" class="profile-img">
+
+
+
                     </div>
+                    
+
+                </div>
+                <div class="col-sm-9">
+                    <h3>{{ customer.username }}</h3>
+                    <p><strong>Email:</strong> {{ customer.email }}</p>
+                    <p><strong>Joined On:</strong> {{ customer.date_joined.strftime('%B %d, %Y') }}</p>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- Orders & Cart Section -->
     <div class="row mt-4">
         <div class="col-sm-6">
-            <h4>My Orders</h4>
+            <h4><i class="bi bi-receipt"></i> My Orders</h4>
             <ul class="list-group">
                 {% for order in customer.orders %}
-                <li class="list-group-item">Order #{{ order.id }} - {{ order.status }} - {{ order.quantity }} items - ${{ order.price }}</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Order #{{ order.id }} - {{ order.status }} - {{ order.quantity }} items
+                    <span class="badge bg-primary rounded-pill">Ksh {{ order.price }}</span>
+                </li>
                 {% endfor %}
             </ul>
         </div>
         
         <div class="col-sm-6">
-            <h4>My Cart</h4>
+            <h4><i class="bi bi-cart"></i> My Cart</h4>
             <ul class="list-group">
                 {% for cart_item in customer.cart_items %}
-                <li class="list-group-item">{{ cart_item.product.product_name }} - {{ cart_item.quantity }} x ${{ cart_item.product.current_price }}</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ cart_item.product.product_name }} - {{ cart_item.quantity }} x
+                    <span class="badge bg-success rounded-pill">Ksh {{ cart_item.product.current_price }}</span>
+                </li>
                 {% endfor %}
             </ul>
         </div>

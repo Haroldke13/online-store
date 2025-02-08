@@ -2,58 +2,127 @@
 
 {% block title %} Shop Items {% endblock %}
 
+{% block styles %}
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" 
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<!-- Custom CSS -->
+<style>
+    body {
+        background-color: #121212;
+        color: #fff;
+    }
+    .container {
+        margin-top: 30px;
+    }
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    .btn-action {
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .btn-update {
+        background-color: #007bff;
+        color: white;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+    .btn-update:hover { background-color: #0056b3; }
+    .btn-delete:hover { background-color: #b02a37; }
+    .search-box {
+        width: 50%;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
+<div class="container">
+    <h2 class="text-center mb-4">Shop Items</h2>
 
-{% if items | length < 1 %}
-<h3 style="color: white;">No Shop Items </h3>
+    <!-- Search Box -->
+    <input type="text" id="search" class="form-control search-box" 
+           placeholder="Search by Product Name..." onkeyup="filterTable()">
 
-{% else %}
+    {% if items | length < 1 %}
+        <h3 class="text-white text-center">No Shop Items Available</h3>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Date Added</th>
+                        <th>Product Name</th>
+                        <th>Previous Price</th>
+                        <th>Current Price</th>
+                        <th>In Stock</th>
+                        <th>Product Picture</th>
+                        <th>Flash Sale</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsTable">
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.date_added }}</td>
+                        <td>{{ item.product_name }}</td>
+                        <td><del class="text-danger">${{ item.previous_price }}</del></td>
+                        <td class="text-success">${{ item.current_price }}</td>
+                        <td>{{ item.in_stock }}</td>
+                        <td>
+                            <img src="{{ url_for('views.media', filename=item.product_picture) }}" 
+                                 alt="Product Image" 
+                                 class="img-thumbnail" style="height: 75px; width: 75px;">
+                        </td>
+                        <td>
+                            {% if item.flash_sale %}
+                                <span class="badge bg-success">On Sale</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No Sale</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/update-item/{{ item.id }}" class="btn-action btn-update">Update</a>
+                            <a href="/delete-item/{{ item.id }}" class="btn-action btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
 
-<table class="table table-dark table-hover">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Date Added</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">Previous Price</th>
-            <th scope="col">Current Price</th>
-            <th scope="col">In Stock</th>
-            <th scope="col">Product Picture</th>
-            <th scope="col">Flash Sale</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
+{% endblock %}
 
-    <tbody>
-        {% for item in items %}
+{% block scripts %}
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-        <tr>
-            <th scope="row">{{ item.id }}</th>
-            <td>{{ item.date_added }}</td>
-            <td>{{ item.product_name }}</td>
-            <td>{{ item.previous_price }}</td>
-            <td>{{ item.current_price }}</td>
-            <td>{{ item.in_stock }}</td>
-            <td><img src="{{ item.product_picture }}" alt="" style="height: 50px; width: 50px; border-radius: 2px;"></td>
-            <td>{{ item.flash_sale }}</td>
+<!-- JavaScript for Table Search -->
+<script>
+    function filterTable() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let rows = document.getElementById("itemsTable").getElementsByTagName("tr");
 
-
-            <td>
-                <a href="/update-item/{{ item.id }}">Update</a>
-                <br>
-                <a href="/delete-item/{{ item.id }}">Delete</a>
-            </td>
-
-        </tr>
-
-
-        {% endfor %}
-    </tbody>
-</table>
-
-
-{% endif %}
-
-
+        for (let i = 0; i < rows.length; i++) {
+            let productName = rows[i].getElementsByTagName("td")[2]; 
+            if (productName) {
+                let textValue = productName.textContent || productName.innerText;
+                rows[i].style.display = textValue.toLowerCase().includes(input) ? "" : "none";
+            }
+        }
+    }
+</script>
 {% endblock %}

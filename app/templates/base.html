@@ -1,9 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+<head><meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Online Market | {% block title %} {% endblock %} </title>
+    
+    <!-- Title (Dynamic for SEO) -->
+    <title>Online Market | {% block title %} Shop the Best Deals {% endblock %}</title>
+
+    <!-- Meta Description (SEO Optimized) -->
+    <meta name="description" content="Shop the latest trends, electronics, fashion, and more at unbeatable prices. Fast shipping & secure payments. Discover amazing deals today!">
+    
+    <!-- Keywords (SEO Boost) -->
+    <meta name="keywords" content="online shopping, best deals, buy online, fashion, electronics, free shipping, secure payments">
+    
+    <!-- Author -->
+    <meta name="author" content="Online Market Team">
+    
+    <!-- Open Graph (OG) for Social Media -->
+    <meta property="og:title" content="Online Market - Best Deals & Discounts">
+    <meta property="og:description" content="Find the best deals on fashion, electronics, and more. Shop online with fast delivery and secure payments.">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Cards (For Twitter Sharing) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Online Market - Best Deals & Discounts">
+    <meta name="twitter:description" content="Shop fashion, electronics, and more at the best prices. Secure payments & fast delivery.">
+
+    
+
+    <!-- Robots Meta Tag (Ensure Search Engines Index the Site) -->
+    <meta name="robots" content="index, follow">
+    </title>
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
@@ -16,29 +42,37 @@
         body {
             background-color: lightgray;
         }
+        
         .navbar {
             background-color: pink;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 1s ease-in-out;
         }
+
         .navbar-brand {
             font-size: 28px;
             font-weight: bold;
             color: blue;
         }
+
         .navbar-nav .nav-link {
             font-size: 18px;
             transition: 0.3s;
         }
+
         .navbar-nav .nav-link:hover {
             color: blue !important;
         }
+
         .btn-search {
             background-color: blue;
             color: white;
         }
+
         .btn-search:hover {
             background-color: darkblue;
         }
+
         .footer {
             background-color: pink;
             color: black;
@@ -52,13 +86,16 @@
             .navbar-brand {
                 font-size: 24px;
             }
+
             .navbar-nav .nav-link {
                 font-size: 16px;
             }
+
             .btn-search {
                 width: 100%;
                 margin-top: 10px;
             }
+
             .footer {
                 font-size: 14px;
             }
@@ -67,10 +104,10 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light" id="dynamic-navbar">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="fa-brands fa-solid fa-store"></i> Online Market
+                <i class="fa-solid fa-store"></i> Online Market
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <i class="bi bi-list"></i>
@@ -80,7 +117,6 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/">Home</a>
                     </li>
-                   
                 </ul>
                 <form class="d-flex" action="/search" method="POST">
                     <input class="form-control me-2" name="search" type="search" placeholder="Search">
@@ -94,36 +130,28 @@
                             <span id="cart-count">(0)</span>
                         </a>
                     </li>
-                    
+
                     <script>
-                        // Example cart items array (this would typically come from your cart logic or a session variable)
-                        const cartItems = [
-                            { id: 1, name: 'Item 1' },
-                            { id: 2, name: 'Item 2' }
-                        ];
-                    
-                        // Update the cart count
+                        // Example cart items array
+                        const cartItems = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
                         document.getElementById('cart-count').textContent = `(${cartItems.length})`;
                     </script>
-                    
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Account</a>
                         <ul class="dropdown-menu">
                             {% if current_user.is_authenticated %}
                                 <li><a class="dropdown-item" href="/profile/{{ current_user.id }}"><i class="fa-solid fa-user"></i> Profile</a></li>
                                 <li><a class="dropdown-item" href="/orders"><i class="fa-solid fa-truck-fast"></i> Orders</a></li>
-
                                 <li><a class="dropdown-item" href="/customers"><i class="fa-solid fa-users"></i> Customers</a></li>
                                 <li><a class="dropdown-item" href="/shop-items"><i class="fa-solid fa-store"></i> Shop Items</a></li>
                                 <li><a class="dropdown-item" href="/add-shop-items"><i class="fa-solid fa-plus"></i> Add Shop Items</a></li>
                                 <li><a class="dropdown-item" href="/view-orders"><i class="fa-solid fa-box"></i> View Orders</a></li>
                                 <li><a class="dropdown-item" href="/admin"><i class="fa-solid fa-cogs"></i> Admin</a></li>
-                                <li><a class="dropdown-item" href="/add-shop-items"><i class="fa-solid fa-plus-circle"></i> Add New Item</a></li>
-
                                 <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
                             {% else %}
-                            <li><a class="dropdown-item" href="/login"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-                            <li><a class="dropdown-item" href="/signup"><i class="fa-solid fa-right-to-bracket"></i> Sign Up</a></li>
+                                <li><a class="dropdown-item" href="/login"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+                                <li><a class="dropdown-item" href="/signup"><i class="fa-solid fa-user-plus"></i> Sign Up</a></li>
                             {% endif %}
                         </ul>
                     </li>
@@ -133,7 +161,6 @@
     </nav>
 
     <!-- Flash Messages -->
-
     {% for message in get_flashed_messages() %}
         <div class="alert alert-success alert-dismissible fade show container mt-3" role="alert">
             <strong>{{ message }}</strong>
@@ -145,13 +172,30 @@
     {% endblock %}
     
     <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2025 Online Market. All rights reserved. | <a href="https://github.com/haroldke13" class="text-white">
-          <i class="fa" aria-hidden="true"></i> GitHub
-      </a>
+    <footer class="footer" id= "footer_">
+        <p>&copy; 2025 Online Market. All rights reserved. | 
+          <a href="https://github.com/haroldke13" class="text-white">
+              <i class="fa-brands fa-github"></i> GitHub
+          </a>
+        </p>
     </footer>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Change navbar and footer color every 5 seconds
+        const navbar = document.getElementById("dynamic-navbar");
+        const footer = document.getElementById("footer_");
+    
+        let colors = ["pink", "turquoise"];
+        let index = 0;
+    
+        setInterval(() => {
+            index = (index + 1) % colors.length;
+            navbar.style.backgroundColor = colors[index];
+             // Fix: Changing footer color correctly
+        }, 10000);
+    </script>
 </body>
 </html>

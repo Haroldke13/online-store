@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, length, NumberRange
 from flask_wtf.file import FileField, FileRequired
 
 
+
 class SignUpForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired(), length(min=2)])

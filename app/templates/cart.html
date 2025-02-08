@@ -3,6 +3,42 @@
 {% block title %} Cart {% endblock %}
 
 {% block body %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
+    .cart-img {
+        border-radius: 10px;
+        transition: transform 0.3s ease-in-out;
+    }
+    .cart-img:hover {
+        transform: scale(1.1);
+    }
+    .card {
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .btn {
+        border-radius: 50px;
+        transition: background 0.3s ease-in-out;
+    }
+    .btn-danger:hover {
+        background-color: #dc3545;
+    }
+    @media (max-width: 768px) {
+        .row {
+            flex-direction: column;
+        }
+        .col-sm-8, .col-sm-4 {
+            width: 100%;
+        }
+    }
+</style>
 
 <div class="container my-5">
 
@@ -82,7 +118,7 @@
                         
                         <form id="mpesa-form" action="/mpesa/stk_push" method="POST">
                             <input type="text" name="phone_number" placeholder="Enter M-Pesa Phone Number" required>
-                            <input type="text" name="amount" value="{{ total }}">  <!-- Ensure 'amount' is set correctly -->
+                            <input type="hidden" name="amount" value="{{ total }}">  <!-- Ensure 'amount' is set correctly -->
                             <button type="submit" class="btn btn-success btn-block">Pay with M-Pesa</button>
                         </form>
                         
@@ -171,6 +207,28 @@
         <h1 class="text-center mb-5" style="color: white;">Your Cart is Empty</h1>
         {% endif %}
     </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".plus-cart").forEach(button => {
+                button.addEventListener("click", function() {
+                    let quantityElement = this.previousElementSibling;
+                    let quantity = parseInt(quantityElement.textContent, 10) + 1;
+                    quantityElement.textContent = quantity;
+                });
+            });
+
+            document.querySelectorAll(".minus-cart").forEach(button => {
+                button.addEventListener("click", function() {
+                    let quantityElement = this.nextElementSibling;
+                    let quantity = Math.max(1, parseInt(quantityElement.textContent, 10) - 1);
+                    quantityElement.textContent = quantity;
+                });
+            });
+        });
+    </script>
+
 </div>
 
 {% endblock %}

@@ -17,11 +17,16 @@ def create_database():
 def create_app():
     #Initialize the flask app
     app = Flask(__name__)
+
+    
     
     app.config['SECRET_KEY'] = 'do_not_show_this_to_anyone_100'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///database.sqlite3'
     
+    # Initialize configurations
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/profile_pics')
 
+    # Initialize database
     db.init_app(app)
 
     #Error handlers
@@ -42,14 +47,16 @@ def create_app():
 
     #Import blueprints
     from .views import views
-    from .auth import auth
     from .admin import admin
     from .models import Customer, Cart, Product, Order
     
     #Register blueprints
 
-    app.register_blueprint(views, url_prefix='/') # localhost:5000/about-us
-    app.register_blueprint(auth, url_prefix='/') # localhost:5000/auth/change-password
+    # Import Blueprints inside function (avoids circular import)
+    from .auth import auth
+    app.register_blueprint(auth, url_prefix="/")
+
+    app.register_blueprint(views, url_prefix='/') #
     app.register_blueprint(admin, url_prefix='/')
 
     #Instantiate the database. Creates /instance folfer containing the database file

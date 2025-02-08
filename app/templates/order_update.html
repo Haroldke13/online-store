@@ -4,56 +4,112 @@
 
 {% block body %}
 
-<table class="table table-dark table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Order Status</th>
-            <th scope="col">Order Status</th>
-        </tr>
-    </thead>
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <tbody>
-        <tr>
-            <form action="" method="POST" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
+<!-- Custom CSS for Styling -->
+<style>
+    body {
+        background: #f8f9fa;
+        font-family: 'Poppins', sans-serif;
+    }
 
-                <td>{{ form.order_status }}</td>
-                <td>{{ form.update() }}</td>
-            </form>
-        </tr>
-    </tbody>
-</table>
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.8s ease-in-out;
+    }
 
-{% endblock %}
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-{% block body %}
+    h2 {
+        font-weight: 600;
+        color: #343a40;
+        text-align: center;
+    }
 
-<h2 class="text-center text-white mb-4">Update Order Status</h2>
+    .form-group {
+        margin-bottom: 1rem;
+    }
 
-<!-- Check if there are any flash messages to display -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <div class="alert alert-info">
-            {% for category, message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
+    .form-group label {
+        font-weight: 500;
+        color: #555;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        height: 45px;
+        border: 1px solid #ced4da;
+        transition: border 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    }
+
+    .btn-custom {
+        background: #007bff;
+        color: white;
+        border-radius: 8px;
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+        background: #0056b3;
+    }
+
+    .status-icon {
+        font-size: 1.2rem;
+        margin-right: 8px;
+        color: #17a2b8;
+    }
+
+    .alert {
+        animation: fadeIn 1s ease-in-out;
+        text-align: center;
+    }
+</style>
+
+<!-- Order Update Section -->
+<div class="container mt-5">
+    <h2><i class="fas fa-edit"></i> Update Order Status</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-info">
+                {% for category, message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Order Update Form -->
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="order_status"><i class="fas fa-truck status-icon"></i> Order Status:</label>
+            {{ form.order_status(class="form-control") }}
         </div>
-    {% endif %}
-{% endwith %}
 
-<!-- Update Order Form -->
-<form action="" method="POST" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}  <!-- Hidden tag for CSRF protection -->
-
-    <div class="form-group">
-        <label for="order_status" class="text-white">Order Status:</label>
-        {{ form.order_status(class="form-control") }}  <!-- Form field for status -->
-    </div>
-
-    <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary">Update Order</button>
-    </div>
-</form>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-custom"><i class="fas fa-save"></i> Update Order</button>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
-

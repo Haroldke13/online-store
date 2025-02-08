@@ -21,17 +21,32 @@ faker = Faker()
 # Load environment variables
 load_dotenv()
 
+# PayPal Credentials
+PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
+PAYPAL_CLIENT_SECRET = os.getenv("PAYPAL_CLIENT_SECRET")
 
-PAYPAL_CLIENT_ID =  'AdZ38dWwRg-vOQxAjv_ZAXDRp2K6xhm2w55BwnBVW8wH9jHKZKC3BYosJqqOZ1m0cs4z9U5yHc-IxefZ'
-PAYPAL_CLIENT_SECRET ='EH3ywSuqZTBoUQP9HEEOTGH7UfjPR2eGs3eVWcl1qeb3bw1q_6Cs1RDPyd-Kfl4pB0gdswzR3iFFL2UD'
+# M-Pesa Credentials
+MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
+MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
+MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
+MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
+MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
 
-PAYPAL_API_URL = "https://api.sandbox.paypal.com"
+# Airtel Money Credentials
+AIRTEL_MONEY_CLIENT_ID = os.getenv("AIRTEL_MONEY_CLIENT_ID")
+AIRTEL_MONEY_CLIENT_SECRET = os.getenv("AIRTEL_MONEY_CLIENT_SECRET")
+AIRTEL_MONEY_API_URL = os.getenv("AIRTEL_MONEY_API_URL")
+AIRTEL_MONEY_CALLBACK_URL = os.getenv("AIRTEL_MONEY_CALLBACK_URL")
+AIRTEL_MONEY_HASH_KEY = os.getenv("AIRTEL_MONEY_HASH_KEY")
+
+PAYPAL_API_URL =  os.getenv("PAYPAL_API_URL")
 
 
-SECRET_KEY = 'do_not_show_this_to_anyone_100'
-SQLALCHEMY_DATABASE_URI = 'sqlite:///database.sqite3'
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-CORS_HEADERS = 'Content-Type'
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS")
+CORS_HEADERS = os.getenv("CORS_HEADERS")
 
 
 
@@ -330,18 +345,6 @@ def orders():
 
 
 
-# Load environment variables
-load_dotenv()
-
-MPESA_CONSUMER_KEY="qHh6YOPbkv5g1absVTrmWDFkA8Oy1UXi4fGrdcrGawlIcGAF"
-
-MPESA_CONSUMER_SECRET="wUNIe8ouaJI9TUfVbzLGtB43j8WLVRJQaZtrQIxo46uKX2DVBsA2ZCbYyenhWHvF"
-
-MPESA_SHORTCODE="174379"
-
-MPESA_PASSKEY="bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
-
-MPESA_CALLBACK_URL="https://ecommerce-ts8m.onrender.com/mpesa/callback"
 
 
 def get_mpesa_access_token():
@@ -554,7 +557,7 @@ CATEGORIES = {
     "books": [
         "Fiction", "Non-Fiction", "Science", "Biography", "Fantasy", "Mystery", "Romance", "Horror", 
         "History", "Self-help", "Cookbooks", "Travel", "Children's Books", "Textbooks", "Graphic Novels", 
-        "Poetry", "Philosophy", "Art", "Psychology", "Business"
+        "Poetry", "Philosophy", "Art", "Psychology", "Business","Book"
     ],
     "automotive": [
         "Car Tires", "Engine Oil", "Car Battery", "Brake Pads", "Wipers", "Car Interior Accessories", "Car Exterior Accessories", 
@@ -593,25 +596,13 @@ def search_random(category):
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-AIRTEL_MONEY_CLIENT_ID="ce72420b-3508-40e7-974a-8adbe509bfe6"
-AIRTEL_MONEY_CLIENT_SECRET="ce72420b-3508-40e7-974a-8adbe509bfe6"
-AIRTEL_MONEY_API_URL="https://openapiuat.airtel.africa"
-AIRTEL_MONEY_CALLBACK_URL="https://ecommerce-ts8m.onrender.com/airtelmoney/callback"
-AIRTEL_MONEY_HASH_KEY="4dc91b70ce884c42ac6caa49b6de9aa"
+
 
 
 import hashlib
 import hmac
 
 
-
-
-# Airtel Money Configs (Environment Variables)
-AIRTEL_MONEY_CLIENT_ID = os.getenv("AIRTEL_MONEY_CLIENT_ID")
-AIRTEL_MONEY_CLIENT_SECRET = os.getenv("AIRTEL_MONEY_CLIENT_SECRET")
-AIRTEL_MONEY_API_URL = os.getenv("AIRTEL_MONEY_API_URL")
-AIRTEL_MONEY_CALLBACK_URL = os.getenv("AIRTEL_MONEY_CALLBACK_URL")
-AIRTEL_MONEY_HASH_KEY = os.getenv("AIRTEL_MONEY_HASH_KEY")
 
 # Generate AES Key
 AES_KEY = base64.b64encode(os.urandom(32)).decode()
@@ -844,6 +835,8 @@ def shop_items():
         if not items:
             flash('No shop items available', 'info')  # Optional flash message
         return render_template('shop_items.html', items=items)
+    
+    
     except Exception as e:
         flash(f"An error occurred while fetching shop items: {e}", 'danger')
         return redirect(url_for('views.home'))  # or wherever you want to redirect on error
