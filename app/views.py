@@ -304,13 +304,6 @@ def payment():
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-@views.route('/')
-def home():
-
-    items = Product.query.filter_by(flash_sale=True)
-
-    return render_template('home.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()if current_user.is_authenticated else [])
-
 
 
 @views.route('/orders')
@@ -731,9 +724,43 @@ from flask import send_from_directory
 import os
 
 # Ensure UPLOAD_FOLDER is an absolute path
+import os
+from flask import render_template, send_from_directory
+from .models import Product, Cart  # Ensure correct import
+from flask_login import current_user
+
+# Path to media folder
+MEDIA_FOLDER = os.path.join(os.getcwd(), 'app/static', 'media')
+
+@views.route('/')
+def home():
+    items = Product.query.filter_by(flash_sale=True)
+
+    # Check if the media folder exists, create it if not
+    if not os.path.exists(MEDIA_FOLDER):
+        os.makedirs(MEDIA_FOLDER)
+
+    # List all mp3 & m4a files safely
+    songs = []
+    if os.path.exists(MEDIA_FOLDER):  # Double-check folder existence
+        songs = [f for f in os.listdir(MEDIA_FOLDER) if f.endswith(('.mp3', '.m4a'))]
+
+    return render_template(
+        'home.html',
+        songs=songs,
+        items=items,
+        cart=Cart.query.filter_by(customer_link=current_user.id).all() if current_user.is_authenticated else []
+    )
+
+@views.route('/play/<filename>')
+def play_music(filename):
+    return send_from_directory(MEDIA_FOLDER, filename)
+
 
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'media')
+
+
 
 @views.route('/media/<path:filename>')
 def media(filename):

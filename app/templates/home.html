@@ -81,6 +81,32 @@
     }
 </style>
 
+<!-- Music Player Section -->
+<div class="container mt-4">
+    <h5 class="section-title">🎵 Music Player</h5>
+
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <select id="musicDropdown" class="form-select w-50 mb-3">
+            <option value="" disabled selected>Choose a song...</option>
+            {% for song in songs %}
+                <option value="{{ url_for('views.play_music', filename=song) }}">{{ song }}</option>
+            {% endfor %}
+        </select>
+
+        <audio id="audioPlayer" controls class="w-50">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+</div>
+
+<script>
+    document.getElementById("musicDropdown").addEventListener("change", function() {
+        const audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.src = this.value;
+        audioPlayer.play();
+    });
+</script>
+
 
 <section>
 <div class="container text-center">
@@ -114,8 +140,23 @@
 
         <!-- Center Image -->
         <div class="col-md-6 text-center">
-            <img src="../static/images/giphy.gif" class="img-fluid rounded shadow" alt="Promo">
+            <img id="promoImage" src="../static/images/giphy.gif" class="img-fluid rounded shadow" alt="Promo">
         </div>
+
+        <script>
+            // Image paths
+            const images = [
+                "../static/images/giphy.gif",
+                "../static/images/giphy1.gif"
+            ];
+            
+            let index = 0; // Track current image
+            
+            setInterval(() => {
+                index = 1 - index; // Toggle between 0 and 1
+                document.getElementById("promoImage").src = images[index];
+            }, 4000);
+        </script>
 
         <!-- Side Info Cards -->
         <div class="col-md-3">
@@ -187,41 +228,50 @@
 </section>
 
 <section>
-
-
-    <div class="container mt-4">
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2 justify-content-center">
-        
+    <div class="container mt-3">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-1">
             {% for item in items %}
             <div class="col">
-                <div class="card shadow-sm border-0 h-100" style="max-width: 150px;">
-                    <!-- Product Image -->
-                    <img src="{{ url_for('views.media', filename=item.product_picture) }}" class="card-img-top" 
-                                         alt="{{ item.product_name }}" style="height: 120px; object-fit: cover; border-radius: 10px;">
-    
-                    <div class="card-body text-center" style="padding: 10px;">
+                <div class="card shadow-sm border-0 h-100 d-flex flex-column align-items-center p-2" style="max-width: 220px;">
+                    
+                    <!-- Product Image (Uniform Size) -->
+                    <div class="d-flex justify-content-center align-items-center" style="height: 180px; width: 180px;">
+                        <img src="{{ url_for('views.media', filename=item.product_picture) }}" 
+                             alt="{{ item.product_name }}" 
+                             class="img-fluid" 
+                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="card-body text-center d-flex flex-column flex-grow-1 w-100 p-2">
                         <!-- Product Name -->
-                        <h6 class="text-muted" style="font-size: 12px;">{{ item.product_name }}</h6>
-    
+                        <h6 class="text-muted mb-1" style="font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ item.product_name }}
+                        </h6>
+
                         <!-- Pricing -->
-                        <div class="mt-1">
-                            <h6 class="fw-bold" style="font-size: 14px;">Ksh {{ item.current_price }}</h6>
-                            <strike><p class="text-secondary" style="font-size: 10px;">Ksh {{ item.previous_price }}</p></strike>
+                        <div class="mt-auto">
+                            <h6 class="fw-bold text-dark" style="font-size: 16px;">Ksh {{ item.current_price }}</h6>
+                            <strike><p class="text-secondary" style="font-size: 12px;">Ksh {{ item.previous_price }}</p></strike>
                         </div>
-    
+
                         <!-- Stock Info -->
-                        <p class="text-success" style="font-size: 10px;">{{ item.in_stock }} Items Left</p>
-    
+                        <p class="text-success small" style="font-size: 12px;">{{ item.in_stock }} Left</p>
+
                         <!-- Add to Cart Button -->
-                        <a href="{{ url_for('views.add_to_cart', item_id=item.id) }}" class="btn btn-primary w-100" style="font-size: 12px; padding: 5px;">Add to Cart</a>
+                        <a href="{{ url_for('views.add_to_cart', item_id=item.id) }}" 
+                           class="btn btn-sm btn-primary w-100 mt-2" 
+                           style="font-size: 13px; padding: 6px;">Add to Cart</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
-
+        </div>
     </div>
-</div>
 </section>
+
+
+
 
 
 {% endblock %}
