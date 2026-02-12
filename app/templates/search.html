@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %} Search {% endblock %}
+
+{% block body %}
+
+{% if items | length < 1 %}
+<h3 class="text-center text-white">No Items Match Your Search Query</h3>
+{% else %}
+
+<div class="container text-center py-3">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-1" id="productGrid">
+        {% for item in items %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border rounded-2 p-2 d-flex flex-column align-items-center" style="max-width: 220px;">
+                
+                <!-- Product Image (Uniform Size) -->
+                <div class="d-flex justify-content-center align-items-center" style="height: 180px; width: 180px;">
+                    <img src="{{ item.product_picture }}" 
+                         class="img-fluid" 
+                         alt="{{ item.product_name }}" 
+                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+
+                <!-- Product Details -->
+                <div class="card-body p-2 text-start w-100 d-flex flex-column flex-grow-1">
+                    <h6 class="text-dark text-truncate mb-1" style="font-size: 14px;">{{ item.product_name }}</h6>
+                    
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="fw-bold text-primary mb-0" style="font-size: 15px;">Ksh {{ item.current_price }}</h6>
+                            <strike class="text-muted" style="font-size: 12px;">Ksh {{ item.previous_price }}</strike>
+                        </div>
+                        <a href="{{ url_for('views.add_to_cart', item_id=item.id) }}" 
+                           class="btn btn-sm btn-primary py-1 px-2" style="font-size: 12px;">Add</a>
+                    </div>
+                    
+                    <p class="text-success small mt-1" style="font-size: 12px;">{{ item.in_stock }} left</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+{% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let cards = document.querySelectorAll(".card");
+        cards.forEach(card => {
+            card.addEventListener("mouseenter", () => {
+                card.classList.add("shadow-lg");
+            });
+            card.addEventListener("mouseleave", () => {
+                card.classList.remove("shadow-lg");
+            });
+        });
+    });
+</script>
+
+<style>
+    .card:hover {
+        transform: scale(1.03);
+        transition: all 0.3s ease-in-out;
+    }
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+    }
+</style>
+
+{% endblock %}
