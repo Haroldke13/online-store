@@ -1,0 +1,37 @@
+# VCS
+.git
+.gitignore
+.github
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# Secrets — never bake these into an image.
+# NOTE: a real .env IS committed in this repo. That is the single most important
+# line in this file.
+.env
+.env.*
+*.pem
+*.key
+
+# Local database and uploads: these live in mounted volumes, not the image
+instance/
+app/static/profile_pics/
+*.db
+*.sqlite3
+
+# Local noise
+.DS_Store
+*.swp
+.idea/
+.vscode/
+Dockerfile
+.dockerignore
+DEPLOY.md
