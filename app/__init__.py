@@ -39,9 +39,15 @@ def create_app():
             "value before starting the app."
         )
     app.config['SECRET_KEY'] = secret_key
-    # Local SQLite path - not a secret, kept literal so the app keeps working
-    # regardless of what is in .env.
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///database.sqlite3'
+    # Database URL comes from the environment so a hosted deployment can point
+    # at a managed Postgres; the local SQLite file stays the fallback for dev.
+    # Without this override a host with an ephemeral filesystem silently resets
+    # accounts, products and orders on every restart.
+    app.config['SQLALCHEMY_DATABASE_URI'] = (
+        os.environ.get('SQLALCHEMY_DATABASE_URI')
+        or os.environ.get('DATABASE_URL')
+        or 'sqlite:///database.sqlite3'
+    )
     
     # Initialize configurations
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/profile_pics')
